@@ -1,8 +1,35 @@
-const { user } = require("../models/index");
-
+const { User } = require("../models/index");
+const trimFields = require("../utils/trim-fields");
+const { userInputSchema } = require("../validators/user.validator");
 class UserController {
   static async register(req, res, next) {
     try {
+      const userInput = { ...req.body };
+      const parsedInput = userInputSchema.parse(userInput);
+
+      trimFields(parsedInput, [
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "address",
+      ]);
+
+      const user = await User.create(parsedInput);
+
+      res.status(201).json({
+        success: true,
+        status_code: res.statusCode,
+        message: "Account created successfully",
+        data: {
+          id: user.id,
+          name: user.first_name + " " + user.last_name,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+          address: user.address,
+        },
+      });
     } catch (err) {
       next(err);
     }
