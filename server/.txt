@@ -1,0 +1,13 @@
+User: npx sequelize-cli model:generate --name User --attributes first_name:string,last_name:string,email:string,password:string,role:string,phone:string,address:string
+
+Brand: npx sequelize-cli model:generate --name Brand --attributes name:string
+
+Category: npx sequelize-cli model:generate --name Category --attributes name:string
+
+Product: npx sequelize-cli model:generate --name Product --attributes name:string,brand_id:integer,description:string,price:integer,stock:integer,category_id:integer
+
+Product Category: npx sequelize-cli model:generate --name ProductCategory --attributes product_id:integer,category_id:integer
+
+Order: npx sequelize-cli model:generate --name Order --attributes user_id:integer,total_amount:integer,status:string,shipping_address:string
+
+Order Item: npx sequelize-cli model:generate --name OrderItem --attributes order_id:integer,product_id:integer,quantity:integer,price:integer

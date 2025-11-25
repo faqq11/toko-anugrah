@@ -1,0 +1,77 @@
+Table users {
+  id integer [primary key]
+  first_name varchar
+  last_name varchar
+  email varchar unique
+  password varchar
+  role varchar
+  phone varchar
+  address varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table categories {
+  id integer [primary key]
+  name varchar unique
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table brands {
+  id integer [primary key]
+  name varchar unique
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table products {
+  id integer [primary key]
+  name varchar
+  brand_id integer
+  description varchar
+  price integer
+  stock integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table orders{
+  id integer [pk]
+  user_id integer
+  total_amount integer
+  status varchar
+  shipping_address varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table order_items{
+  id integer [pk]
+  order_id integer
+  product_id integer
+  quantity integer
+  price integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table product_categories{
+  id integer [pk]
+  product_id integer
+  category_id integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Ref: "users"."id" < "orders"."user_id"
+
+Ref: "categories"."id" < "product_categories"."category_id"
+
+Ref: "products"."id" < "product_categories"."product_id"
+
+Ref: "brands"."id" < "products"."brand_id"
+
+Ref: "products"."id" < "order_items"."product_id"
+
+Ref: "orders"."id" < "order_items"."order_id"
