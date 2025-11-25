@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       OrderItem.belongsTo(models.Product);
     }
   }
-  Orderitem.init(
+  OrderItem.init(
     {
       order_id: DataTypes.INTEGER,
       product_id: DataTypes.INTEGER,
@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Orderitem",
+      modelName: "OrderItem",
     }
   );
-  return Orderitem;
+  return OrderItem;
 };
