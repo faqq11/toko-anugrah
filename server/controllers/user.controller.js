@@ -6,6 +6,8 @@ const {
   userInputSchema,
   loginInputSchema,
 } = require("../validators/user.validator");
+const { Op, fn, col } = require("sequelize");
+
 class UserController {
   static async register(req, res, next) {
     try {
@@ -75,6 +77,25 @@ class UserController {
 
   static async getAllUser(req, res, next) {
     try {
+      const users = await User.findAll({
+        attributes: [
+          "id",
+          [fn("CONCAT", col("first_name"), " ", col("last_name")), "name"],
+          "email",
+          "role",
+          "phone",
+          "address",
+        ],
+      });
+      if (users.length < 1) throw new Error("DATA_NOT_FOUND");
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "User list retrieved successfully",
+        data: users,
+      });
+      // console.log(users);
     } catch (err) {
       next(err);
     }

@@ -32,6 +32,18 @@ function errorHandler(err, req, res, next) {
   } else if (err.message === "INVALID_CREDENTIAL") {
     response.status_code = 401;
     response.message = "Invalid email or password";
+  } else if (
+    err.message === "INVALID_TOKEN" ||
+    err.name === "JsonWebTokenError"
+  ) {
+    response.status_code = 401;
+    response.message = "Unauthorized / Invalid token";
+  } else if (err.message === "DATA_NOT_FOUND") {
+    response.status_code = 404;
+    response.message = "Data not found";
+  } else if (err.message === "UNAUTHORIZED") {
+    response.status_code = 403;
+    response.message = "Forbidden. You don't have access to this resource.";
   }
 
   return res.status(response.status_code).json(response);
