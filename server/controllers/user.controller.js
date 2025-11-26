@@ -103,6 +103,25 @@ class UserController {
 
   static async getOneUser(req, res, next) {
     try {
+      const { id } = req.params;
+
+      const user = await User.findByPk(+id);
+      if (!user) throw new Error("DATA_NOT_FOUND");
+      console.log(user);
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "User retrieved successfully",
+        data: {
+          id: user.id,
+          name: user.first_name + " " + user.last_name,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+          address: user.address,
+        },
+      });
     } catch (err) {
       next(err);
     }
