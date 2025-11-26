@@ -293,16 +293,6 @@ Body:
 }
 ```
 
-#### Response - 404 Not found
-
-```json
-{
-  "success": false,
-  "status_code": 404,
-  "message": "User not found"
-}
-```
-
 #### Response - 500 Server Error
 
 ```json

@@ -1,6 +1,11 @@
 const { User } = require("../models/index");
+const { checkPassword } = require("../utils/bcrypt");
+const { signToken } = require("../utils/jwt");
 const trimFields = require("../utils/trim-fields");
-const { userInputSchema } = require("../validators/user.validator");
+const {
+  userInputSchema,
+  loginInputSchema,
+} = require("../validators/user.validator");
 class UserController {
   static async register(req, res, next) {
     try {
@@ -37,6 +42,32 @@ class UserController {
 
   static async login(req, res, next) {
     try {
+      const userInput = req.body;
+      const parsedInput = loginInputSchema.parse(userInput);
+
+      const user = await User.findOne({ where: { email: parsedInput.email } });
+      if (!user) throw new Error("INVALID_CREDENTIAL");
+      if (!checkPassword(parsedInput.password, user.password))
+        throw new Error("INVALID_CREDENTIAL");
+
+      const payload = {
+        id: user.id,
+        name: user.first_name + " " + user.last_name,
+        email: user.email,
+        role: user.role,
+      };
+
+      const token = signToken(payload);
+      console.log(token);
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Login successful",
+        data: {
+          access_token: token,
+        },
+      });
     } catch (err) {
       next(err);
     }

@@ -29,6 +29,9 @@ function errorHandler(err, req, res, next) {
       }
       response.errors[field].push(issue.message);
     });
+  } else if (err.message === "INVALID_CREDENTIAL") {
+    response.status_code = 401;
+    response.message = "Invalid email or password";
   }
 
   return res.status(response.status_code).json(response);
