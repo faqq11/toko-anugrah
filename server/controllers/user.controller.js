@@ -30,7 +30,7 @@ class UserController {
         message: "Account created successfully",
         data: {
           id: user.id,
-          name: user.first_name + " " + user.last_name,
+          name: `${user.first_name} ${user.last_name}`,
           email: user.email,
           role: user.role,
           phone: user.phone,
@@ -54,13 +54,11 @@ class UserController {
 
       const payload = {
         id: user.id,
-        name: user.first_name + " " + user.last_name,
         email: user.email,
         role: user.role,
       };
 
       const token = signToken(payload);
-      console.log(token);
 
       res.status(200).json({
         success: true,
@@ -95,7 +93,6 @@ class UserController {
         message: "User list retrieved successfully",
         data: users,
       });
-      // console.log(users);
     } catch (err) {
       next(err);
     }
@@ -107,7 +104,6 @@ class UserController {
 
       const user = await User.findByPk(+id);
       if (!user) throw new Error("DATA_NOT_FOUND");
-      console.log(user);
 
       res.status(200).json({
         success: true,
@@ -115,7 +111,7 @@ class UserController {
         message: "User retrieved successfully",
         data: {
           id: user.id,
-          name: user.first_name + " " + user.last_name,
+          name: `${user.first_name} ${user.last_name}`,
           email: user.email,
           role: user.role,
           phone: user.phone,
@@ -129,6 +125,53 @@ class UserController {
 
   static async updateUser(req, res, next) {
     try {
+      const { id } = req.params;
+      const userInput = req.body;
+
+      const parsedInput = userInputSchema.parse(userInput);
+
+      trimFields(parsedInput, [
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "address",
+      ]);
+
+      const user = await User.findByPk(+id);
+      if (!user) throw new Error("DATA_NOT_FOUND");
+
+      const isUpdatingPayload = parsedInput.email !== user.email;
+
+      await user.update(parsedInput);
+
+      await user.reload();
+
+      const response = {
+        success: true,
+        status_code: 200,
+        message: "User updated successfully",
+        data: {
+          id: +id,
+          name: `${user.first_name} ${user.last_name}`,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+          address: user.address,
+        },
+      };
+
+      if (isUpdatingPayload) {
+        const newPayload = {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+        };
+        response.token = signToken(newPayload);
+        response.message = "User updated successfully. Please use new token";
+      }
+
+      res.status(200).json(response);
     } catch (err) {
       next(err);
     }
@@ -136,6 +179,26 @@ class UserController {
 
   static async deleteuser(req, res, next) {
     try {
+      const { id } = req.params;
+
+      const user = await User.findByPk(+id);
+      if (!user) throw new Error("DATA_NOT_FOUND");
+
+      await user.destroy();
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "User deleted successfully",
+        data: {
+          id: user.id,
+          name: `${user.first_name} ${user.last_name}`,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+          address: user.address,
+        },
+      });
     } catch (err) {
       next(err);
     }
