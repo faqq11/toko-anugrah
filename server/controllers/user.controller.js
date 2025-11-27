@@ -11,16 +11,16 @@ const { Op, fn, col } = require("sequelize");
 class UserController {
   static async register(req, res, next) {
     try {
-      const userInput = { ...req.body };
-      const parsedInput = userInputSchema.parse(userInput);
-
-      trimFields(parsedInput, [
+      let userInput = { ...req.body };
+      userInput = trimFields(userInput, [
         "first_name",
         "last_name",
         "email",
         "phone",
         "address",
       ]);
+
+      const parsedInput = userInputSchema.parse(userInput);
 
       const user = await User.create(parsedInput);
 
@@ -126,17 +126,17 @@ class UserController {
   static async updateUser(req, res, next) {
     try {
       const { id } = req.params;
-      const userInput = req.body;
+      let userInput = req.body;
 
-      const parsedInput = userInputSchema.parse(userInput);
-
-      trimFields(parsedInput, [
+      userInput = trimFields(userInput, [
         "first_name",
         "last_name",
         "email",
         "phone",
         "address",
       ]);
+
+      const parsedInput = userInputSchema.parse(userInput);
 
       const user = await User.findByPk(+id);
       if (!user) throw new Error("DATA_NOT_FOUND");
