@@ -50,7 +50,7 @@ class BrandController {
       const brand = await Brand.findByPk(+id);
       if (!brand) throw new Error("DATA_NOT_FOUND");
 
-      brand.destroy();
+      await brand.destroy();
 
       res.status(200).json({
         success: true,
