@@ -1,7 +1,7 @@
 const { ZodError } = require("zod");
 
 function errorHandler(err, req, res, next) {
-  // console.log(err.errors[0].instance.constructor.name);
+  console.error(err);
 
   let response = {
     success: false,

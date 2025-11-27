@@ -11,18 +11,7 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false,
         unique: true,
-        validate: {
-          notNull: {
-            args: true,
-            msg: "Category name is required (Tingkat migration)",
-          },
-          notEmpty: {
-            args: true,
-            msg: "Category name is required (Tingkat migration)",
-          },
-        },
       },
       createdAt: {
         allowNull: false,
