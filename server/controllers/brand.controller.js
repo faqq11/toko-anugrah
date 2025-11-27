@@ -5,7 +5,16 @@ const brandInputSchema = require("../validators/brand.validator");
 class BrandController {
   static async getAllBrand(req, res, next) {
     try {
-      console.log("INI DARI BRAND CONTROLLER");
+      const brands = await Brand.findAll();
+
+      if (brands.length < 1) throw new Error("DATA_NOT_FOUND");
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Brand list retrieved successfully",
+        data: brands,
+      });
     } catch (err) {
       next(err);
     }
