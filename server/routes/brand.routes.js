@@ -4,7 +4,7 @@ const authentication = require("../middlewares/authentication");
 const { authorize } = require("../middlewares/authorization");
 const router = express.Router();
 
-// router.get("/", BrandController.getAllBrand);
+router.get("/", authentication, BrandController.getAllBrand);
 router.post("/", authentication, authorize, BrandController.addBrand);
 router.delete("/:id", authentication, authorize, BrandController.deleteBrand);
 
