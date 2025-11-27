@@ -6,6 +6,6 @@ const router = express.Router();
 
 // router.get("/", BrandController.getAllBrand);
 router.post("/", authentication, authorize, BrandController.addBrand);
-// router.delete("/:id", BrandController.deleteBrand);
+router.delete("/:id", authentication, authorize, BrandController.deleteBrand);
 
 module.exports = router;

@@ -36,6 +36,22 @@ class BrandController {
 
   static async deleteBrand(req, res, next) {
     try {
+      const { id } = req.params;
+
+      const brand = await Brand.findByPk(+id);
+      if (!brand) throw new Error("DATA_NOT_FOUND");
+
+      brand.destroy();
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Brand deleted successfully",
+        data: {
+          id: brand.id,
+          name: brand.name,
+        },
+      });
     } catch (err) {
       next(err);
     }
