@@ -1,7 +1,7 @@
 const { ZodError } = require("zod");
 
 function errorHandler(err, req, res, next) {
-  // console.error(err);
+  // console.log(err.errors[0].instance.constructor.name);
 
   let response = {
     success: false,
@@ -12,8 +12,13 @@ function errorHandler(err, req, res, next) {
   if (err.name === "SequelizeUniqueConstraintError") {
     response.status_code = 400;
     response.message = "Validation error";
+
+    const field = err.errors[0].path;
+    const value = err.errors[0].value;
+    const tableName = err.errors[0].instance.constructor.name;
+
     response.errors = {
-      email: ["Email already used"],
+      [field]: [`${tableName} with ${field} '${value}' already exists`],
     };
   } else if (err instanceof ZodError) {
     response.status_code = 400;
