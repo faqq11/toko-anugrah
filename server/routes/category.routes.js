@@ -4,7 +4,7 @@ const authentication = require("../middlewares/authentication");
 const { authorize } = require("../middlewares/authorization");
 const router = express.Router();
 
-// router.get("/", authentication, CategoryController.getAllCategory);
+router.get("/", authentication, CategoryController.getAllCategory);
 router.post("/", authentication, authorize, CategoryController.addCategory);
 router.delete(
   "/:id",

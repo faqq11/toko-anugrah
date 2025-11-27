@@ -5,6 +5,16 @@ const categoryInputSchema = require("../validators/category.validator");
 class CategoryController {
   static async getAllCategory(req, res, next) {
     try {
+      const categories = await Category.findAll();
+
+      if (categories.length < 1) throw new Error("DATA_NOT_FOUND");
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Category list retrieved successfully",
+        data: categories,
+      });
     } catch (err) {
       next(err);
     }
