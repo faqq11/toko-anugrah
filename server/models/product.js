@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      brand_id: {
+      BrandId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {

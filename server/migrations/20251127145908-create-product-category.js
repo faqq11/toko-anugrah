@@ -2,27 +2,22 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Brands", {
+    await queryInterface.createTable("ProductCategories", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-          notNull: {
-            args: true,
-            msg: "Brand name is required (Tingkat migration)",
-          },
-          notEmpty: {
-            args: true,
-            msg: "Brand name is required (Tingkat migration)",
-          },
-        },
+      ProductId: {
+        type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
+      CategoryId: {
+        type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +30,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Brands");
+    await queryInterface.dropTable("ProductCategories");
   },
 };

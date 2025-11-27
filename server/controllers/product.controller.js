@@ -29,7 +29,7 @@ class ProductController {
           {
             name: parsedInput.name,
             description: parsedInput.description,
-            brand_id: parsedInput.brand_id,
+            BrandId: parsedInput.BrandId,
             price: parsedInput.price,
             stock: parsedInput.stock,
           },

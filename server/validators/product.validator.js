@@ -3,7 +3,7 @@ const { z } = require("zod");
 const productInputSchema = z.object({
   name: z.string().trim().min(1, "Product name is required"),
 
-  brand_id: z
+  BrandId: z
     .number("Product brand is required")
     .int("Product brand ID must be an integer")
     .positive("Product brand ID must be positive"),

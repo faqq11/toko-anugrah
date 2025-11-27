@@ -4,7 +4,7 @@ Brand: npx sequelize-cli model:generate --name Brand --attributes name:string
 
 Category: npx sequelize-cli model:generate --name Category --attributes name:string
 
-Product: npx sequelize-cli model:generate --name Product --attributes name:string,BrandId:integer,description:string,price:integer,stock:integer,category_id:integer
+Product: npx sequelize-cli model:generate --name Product --attributes name:string,BrandId:integer,description:string,price:integer,stock:integer
 
 Product Category: npx sequelize-cli model:generate --name ProductCategory --attributes ProductId:integer,CategoryId:integer
 
