@@ -1,3 +1,4 @@
+const { includes } = require("zod");
 const { Product, sequelize, Category, Brand } = require("../models/index");
 const trimFields = require("../utils/trim-fields");
 const productInputSchema = require("../validators/product.validator");
@@ -34,6 +35,30 @@ class ProductController {
 
   static async getOneProduct(req, res, next) {
     try {
+      const { id } = req.params;
+
+      const product = await Product.findByPk(+id, {
+        include: [
+          { model: Category, through: { attributes: [] } },
+          { model: Brand },
+        ],
+      });
+      if (!product) throw new Error("DATA_NOT_FOUND");
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Product retrieved successfully",
+        data: {
+          id: product.id,
+          name: product.name,
+          brand: product.Brand.name,
+          description: product.description,
+          categories: product.Categories.map((cat) => cat.name),
+          price: product.price,
+          stock: product.stock,
+        },
+      });
     } catch (err) {
       next(err);
     }
