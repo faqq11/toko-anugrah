@@ -1,10 +1,32 @@
-const { Product, sequelize } = require("../models/index");
+const { Product, sequelize, Category, Brand } = require("../models/index");
 const trimFields = require("../utils/trim-fields");
 const productInputSchema = require("../validators/product.validator");
 
 class ProductController {
   static async getAllProduct(req, res, next) {
     try {
+      const products = await Product.findAll({
+        include: [
+          { model: Category, through: { attributes: [] } },
+          { model: Brand },
+        ],
+      });
+      if (products.length < 1) throw new Error("DATA_NOT_FOUND");
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Product list retrieved successfully",
+        data: products.map((p) => ({
+          id: p.id,
+          name: p.name,
+          brand: p.Brand.name,
+          description: p.description,
+          categories: p.Categories.map((cat) => cat.name),
+          price: p.price,
+          stock: p.stock,
+        })),
+      });
     } catch (err) {
       next(err);
     }
@@ -40,6 +62,21 @@ class ProductController {
           transaction: t,
         });
 
+        await newProduct.reload({
+          include: [
+            {
+              model: Category,
+              attributes: ["name"],
+              through: { attributes: [] },
+            },
+            {
+              model: Brand,
+              attributes: ["name"],
+            },
+          ],
+          transaction: t,
+        });
+
         return newProduct;
       });
 
@@ -47,7 +84,15 @@ class ProductController {
         success: true,
         status_code: 201,
         message: "Product created successfully",
-        data: product,
+        data: {
+          id: product.id,
+          name: product.name,
+          brand: product.Brand.name,
+          description: product.description,
+          categories: product.Categories.map((cat) => cat.name),
+          price: product.price,
+          stock: product.stock,
+        },
       });
     } catch (err) {
       next(err);
