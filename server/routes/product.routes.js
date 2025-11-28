@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", authentication, ProductController.getAllProduct);
 router.post("/", authentication, authorize, ProductController.addProduct);
-// router.get("/:id", authentication, ProductController.getOneProduct);
+router.get("/:id", authentication, ProductController.getOneProduct);
 // router.put("/:id", authentication, authorize, ProductController.updateProduct);
 // router.delete("/:id", authentication, authorize, ProductController.deleteProduct);
 
