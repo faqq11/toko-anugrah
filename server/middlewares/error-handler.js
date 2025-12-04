@@ -49,6 +49,9 @@ function errorHandler(err, req, res, next) {
   } else if (err.message === "UNAUTHORIZED") {
     response.status_code = 403;
     response.message = "Forbidden. You don't have access to this resource.";
+  } else if (err.message === "INSUFFICIENT_STOCK") {
+    response.status_code = 409;
+    response.message = "Some items in your order are out of stock";
   }
 
   return res.status(response.status_code).json(response);
