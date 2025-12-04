@@ -1,5 +1,8 @@
 const trimFields = require("../utils/trim-fields");
-const { orderInputSchema } = require("../validators/order.validator");
+const {
+  orderInputSchema,
+  updateOrderAddressInputSchema,
+} = require("../validators/order.validator");
 const { Order, sequelize, Product, OrderItem } = require("../models/index");
 
 class OrderController {
@@ -204,12 +207,65 @@ class OrderController {
     }
   }
 
-  // static async updateOrder(req, res, next) {
-  //   try {
-  //   } catch (err) {
-  //     next(err);
-  //   }
-  // }
+  static async updateOrderAddress(req, res, next) {
+    try {
+      let { shipping_address } = req.body;
+      const { id } = req.params;
+
+      shipping_address = shipping_address.trim();
+
+      const parsedInput = updateOrderAddressInputSchema.parse({
+        shipping_address,
+      });
+
+      const order = await Order.findByPk(+id);
+      if (!order) throw new Error("DATA_NOT_FOUND");
+
+      const statuses = ["shipped", "delivered"];
+      if (statuses.includes(order.status)) {
+        throw new Error(`ORDER_ADDRESS_UPDATE: ${order.status}`);
+      }
+
+      await order.update({ shipping_address: parsedInput.shipping_address });
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Order updated successfully",
+        data: order,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async updateOrderStatus(req, res, next) {
+    try {
+      let { status } = req.body;
+      const { id } = req.params;
+
+      status = status.trim();
+
+      const statuses = ["pending", "Processing", "shipped", "delivered"];
+
+      const order = await Order.findByPk(+id);
+      if (!order) throw new Error("DATA_NOT_FOUND");
+      if (!statuses.includes(status)) {
+        throw new Error(`ORDER_STATUS_UPDATE: ${status}`);
+      }
+
+      await order.update({ status });
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Order updated successfully",
+        data: order,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 
   static async deleteOrder(req, res, next) {
     try {

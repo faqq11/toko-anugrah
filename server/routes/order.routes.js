@@ -16,7 +16,21 @@ router.get(
   ownershipAuthorize,
   OrderController.getOneOrder
 );
-// router.post("/", authentication, OrderController.updateOrder);
+
+router.put(
+  "/:id/update/address",
+  authentication,
+  ownershipAuthorize,
+  OrderController.updateOrderAddress
+);
+
+router.put(
+  "/:id/update/status",
+  authentication,
+  authorize,
+  OrderController.updateOrderStatus
+);
+
 router.delete(
   "/:id",
   authentication,
