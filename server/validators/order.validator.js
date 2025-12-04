@@ -25,4 +25,14 @@ const orderInputSchema = z.object({
   items: z.array(itemsInputSchema).min(1, "Order must contain at least 1 item"),
 });
 
-module.exports = { itemsInputSchema, orderInputSchema };
+const updateOrderAddressInputSchema = z.object({
+  shipping_address: z
+    .string()
+    .min(10, "Shipping address must be at least 10 characters"),
+});
+
+module.exports = {
+  itemsInputSchema,
+  orderInputSchema,
+  updateOrderAddressInputSchema,
+};

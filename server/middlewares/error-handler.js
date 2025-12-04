@@ -52,6 +52,14 @@ function errorHandler(err, req, res, next) {
   } else if (err.message === "INSUFFICIENT_STOCK") {
     response.status_code = 409;
     response.message = "Some items in your order are out of stock";
+  } else if (err.message.startsWith("ORDER_ADDRESS_UPDATE:")) {
+    response.status_code = 400;
+    const orderStatus = err.message.split(": ")[1];
+    response.message = `Cannot update address. Order is already ${orderStatus}.`;
+  } else if (err.message.startsWith("ORDER_STATUS_UPDATE:")) {
+    response.status_code = 400;
+    const orderStatus = err.message.split(": ")[1];
+    response.message = `Cannot update status. The status ${orderStatus} does not exist.`;
   }
 
   return res.status(response.status_code).json(response);
