@@ -17,6 +17,11 @@ router.get(
   OrderController.getOneOrder
 );
 // router.post("/", authentication, OrderController.updateOrder);
-// router.post("/", authentication, OrderController.deleteOrder);
+router.delete(
+  "/:id",
+  authentication,
+  ownershipAuthorize,
+  OrderController.deleteOrder
+);
 
 module.exports = router;

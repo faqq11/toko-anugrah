@@ -211,12 +211,31 @@ class OrderController {
   //   }
   // }
 
-  // static async deleteOrder(req, res, next) {
-  //   try {
-  //   } catch (err) {
-  //     next(err);
-  //   }
-  // }
+  static async deleteOrder(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const order = await Order.findByPk(+id);
+      if (!order) throw new Error("DATA_NOT_FOUND");
+
+      await order.destroy();
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Order deleted successfully",
+        data: {
+          id: order.id,
+          user_id: order.UserId,
+          total_amount: order.total_amount,
+          status: order.status,
+          shipping_address: order.shipping_address,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = OrderController;
