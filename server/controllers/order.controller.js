@@ -40,6 +40,46 @@ class OrderController {
     }
   }
 
+  static async getAllOrderOwnership(req, res, next) {
+    try {
+      const userData = req.userData;
+
+      const orders = await Order.findAll({
+        where: { UserId: userData.id },
+        include: [
+          {
+            model: OrderItem,
+            include: [{ model: Product }],
+          },
+        ],
+      });
+
+      if (!orders) throw new Error("DATA_NOT_FOUND");
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Order list retrieved successfully",
+        data: orders.map((order) => ({
+          id: order.id,
+          user_id: order.UserId,
+          total_amount: order.total_amount,
+          status: order.status,
+          shipping_address: order.shipping_address,
+          order_items: order.OrderItems.map((item) => ({
+            id: item.id,
+            order_id: order.id,
+            product_name: item.Product.name,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        })),
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   // static async getOneOrder(req, res, next) {
   //   try {
   //   } catch (err) {
