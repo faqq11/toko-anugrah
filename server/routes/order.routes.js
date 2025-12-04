@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 
 router.get("/", authentication, authorize, OrderController.getAllOrder);
-router.get("/", authentication, OrderController.getAllOrder);
+router.get("/own", authentication, OrderController.getAllOrderOwnership);
 // router.post("/:id", authentication, OrderController.getOneOrder);
 router.post("/", authentication, OrderController.addOrder);
 // router.post("/", authentication, OrderController.updateOrder);
