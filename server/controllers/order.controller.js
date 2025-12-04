@@ -14,7 +14,7 @@ class OrderController {
         ],
       });
 
-      if (!orders) throw new Error("DATA_NOT_FOUND");
+      if (orders.length < 1) throw new Error("DATA_NOT_FOUND");
 
       res.status(200).json({
         success: true,
@@ -54,7 +54,7 @@ class OrderController {
         ],
       });
 
-      if (!orders) throw new Error("DATA_NOT_FOUND");
+      if (orders.length < 1) throw new Error("DATA_NOT_FOUND");
 
       res.status(200).json({
         success: true,
@@ -80,12 +80,43 @@ class OrderController {
     }
   }
 
-  // static async getOneOrder(req, res, next) {
-  //   try {
-  //   } catch (err) {
-  //     next(err);
-  //   }
-  // }
+  static async getOneOrder(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const order = await Order.findByPk(+id, {
+        include: [
+          {
+            model: OrderItem,
+            include: [{ model: Product }],
+          },
+        ],
+      });
+      if (!order) throw new Error("DATA_NOT_FOUND");
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "Order retrieved successfully",
+        data: {
+          id: order.id,
+          user_id: order.UserId,
+          total_amount: order.total_amount,
+          status: order.status,
+          shipping_address: order.shipping_address,
+          order_items: order.OrderItems.map((item) => ({
+            id: item.id,
+            order_id: order.id,
+            product_name: item.Product.name,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 
   static async addOrder(req, res, next) {
     try {
