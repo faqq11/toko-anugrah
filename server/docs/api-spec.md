@@ -1367,7 +1367,7 @@ Headers:
 
 ### Order
 
-### 1. GET all Orders
+### 1. GET all Orders(admin)
 
 **GET** `/orders`
 
@@ -1488,7 +1488,96 @@ Headers:
 
 ---
 
-### 2. Get one order
+### 2. GET all Orders(ownership)
+
+**GET** `/orders`
+
+Description: Requires token. Get list of all orders.
+
+#### Request
+
+Headers:
+| Key | Value |
+|-----|-------|
+| Authorization | Bearer `<token>` |
+
+##### Response - 200 OK
+
+```json
+{
+  "success": true,
+  "status_code": 200,
+  "message": "Order list retrieved successfully",
+  "data": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "total_amount": 50000,
+      "status": "pending",
+      "shipping_address": "Jl. Merdeka No. 123, Jakarta",
+      "order_item": [
+        {
+          "id": 1,
+          "order_id": 1,
+          "product_name": "Antangin",
+          "quantity": 5,
+          "price": 15000
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "user_id": 1,
+      "total_amount": 75000,
+      "status": "shipped",
+      "shipping_address": "Jl. Gatot Subroto No. 67, Surabaya",
+      "order_item": [
+        {
+          "id": 1,
+          "order_id": 1,
+          "product_name": "Antangin",
+          "quantity": 5,
+          "price": 15000
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### Response - 401 Unauthorized
+
+```json
+{
+  "success": false,
+  "status_code": 401,
+  "message": "Unauthorized / Invalid token"
+}
+```
+
+#### Response - 404 Not Found
+
+```json
+{
+  "success": false,
+  "status_code": 404,
+  "message": "Data not found"
+}
+```
+
+#### Response - 500 Server Error
+
+```json
+{
+  "success": false,
+  "status_code": 500,
+  "message": "Internal server error"
+}
+```
+
+---
+
+### 3. Get one order
 
 **GET** `/orders/:id`
 
@@ -1559,7 +1648,7 @@ Headers:
 
 ---
 
-### 3. Create a new order
+### 4. Create a new order
 
 **POST** `/orders`
 
@@ -1638,7 +1727,7 @@ Body:
 
 ---
 
-### 4. Update an order
+### 5. Update an order
 
 **PUT** `/orders/:id`
 
@@ -1736,7 +1825,7 @@ Body:
 
 ---
 
-### 5. Delete an order
+### 6. Delete an order
 
 **DELETE** `/orders/:id`
 
