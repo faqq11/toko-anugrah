@@ -1,0 +1,121 @@
+const trimFields = require("../utils/trim-fields");
+const { orderInputSchema } = require("../validators/order.validator");
+const { Order, sequelize, Product, OrderItem } = require("../models/index");
+
+class OrderController {
+  // static async getAllOrder(req, res, next) {
+  //   try {
+  //   } catch (err) {
+  //     next(err);
+  //   }
+  // }
+
+  // static async getOneOrder(req, res, next) {
+  //   try {
+  //   } catch (err) {
+  //     next(err);
+  //   }
+  // }
+
+  static async addOrder(req, res, next) {
+    try {
+      let input = req.body;
+      const userData = req.userData;
+
+      input = trimFields(input, ["shipping_address"]);
+
+      const parsedInput = orderInputSchema.parse(input);
+
+      const result = await sequelize.transaction(async (t) => {
+        const productIds = parsedInput.items.map((item) => item.id);
+        const products = await Product.findAll({
+          where: { id: productIds },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        console.log(products);
+
+        if (products.length !== productIds.length) {
+          throw new Error("DATA_NOT_FOUND");
+        }
+
+        let total_amount = 0;
+        const orderItems = [];
+
+        for (const item of parsedInput.items) {
+          const product = products.find((p) => p.id === item.id);
+
+          if (!product) {
+            throw new Error(`DATA_NOT_FOUND`);
+          }
+
+          if (product.stock < item.quantity) {
+            throw new Error(`INSUFFICIENT_STOCK`);
+          }
+
+          const subtotal = product.price * item.quantity;
+          total_amount += subtotal;
+
+          orderItems.push({
+            ProductId: item.id,
+            quantity: item.quantity,
+            price: product.price,
+          });
+        }
+
+        const order = await Order.create(
+          {
+            UserId: userData.id,
+            shipping_address: parsedInput.shipping_address,
+            total_amount,
+            status: "pending",
+          },
+          { transaction: t }
+        );
+
+        const orderItemsWithOrderId = orderItems.map((item) => ({
+          ...item,
+          OrderId: order.id,
+        }));
+
+        await OrderItem.bulkCreate(orderItemsWithOrderId, { transaction: t });
+
+        for (const item of parsedInput.items) {
+          await Product.decrement("stock", {
+            by: item.quantity,
+            where: { id: item.id },
+            transaction: t,
+          });
+        }
+
+        return order;
+      });
+
+      res.status(201).json({
+        success: true,
+        status_code: 201,
+        message: "Order created successfully",
+        data: result,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  // static async updateOrder(req, res, next) {
+  //   try {
+  //   } catch (err) {
+  //     next(err);
+  //   }
+  // }
+
+  // static async deleteOrder(req, res, next) {
+  //   try {
+  //   } catch (err) {
+  //     next(err);
+  //   }
+  // }
+}
+
+module.exports = OrderController;
