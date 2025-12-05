@@ -6,5 +6,6 @@ router.use("/brands", require("./brand.routes"));
 router.use("/categories", require("./category.routes"));
 router.use("/products", require("./product.routes"));
 router.use("/orders", require("./order.routes"));
+router.use("/statistics", require("./statistic.routes"));
 
 module.exports = router;

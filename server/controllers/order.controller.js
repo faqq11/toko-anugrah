@@ -221,7 +221,7 @@ class OrderController {
       const order = await Order.findByPk(+id);
       if (!order) throw new Error("DATA_NOT_FOUND");
 
-      const statuses = ["shipped", "delivered"];
+      const statuses = ["shipped", "delivered", "completed"];
       if (statuses.includes(order.status)) {
         throw new Error(`ORDER_ADDRESS_UPDATE: ${order.status}`);
       }
@@ -246,7 +246,13 @@ class OrderController {
 
       status = status.trim();
 
-      const statuses = ["pending", "Processing", "shipped", "delivered"];
+      const statuses = [
+        "pending",
+        "Processing",
+        "shipped",
+        "delivered",
+        "completed",
+      ];
 
       const order = await Order.findByPk(+id);
       if (!order) throw new Error("DATA_NOT_FOUND");
