@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router";
+
 export default function ProductCard({ product }) {
+  const navigate = useNavigate();
   return (
     <div className="border rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition duration-200 flex flex-col">
       <div className="h-40 bg-slate-100 flex items-center justify-center">
@@ -47,8 +50,11 @@ export default function ProductCard({ product }) {
           </span>
         </div>
 
-        <button className="bg-green-600 text-white rounded-lg py-2 hover:bg-green-500 cursor-pointer">
-          Add to Chart
+        <button
+          className="bg-green-600 text-white rounded-lg py-2 hover:bg-green-500 cursor-pointer"
+          onClick={() => navigate(`/products/${product.id}`)}
+        >
+          Detail
         </button>
       </div>
     </div>

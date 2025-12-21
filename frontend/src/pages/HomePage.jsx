@@ -34,7 +34,7 @@ export default function HomePage() {
     <>
       <div className="grid grid-cols-5 gap-5">
         {products.map((product) => (
-          <ProductCard product={product} />
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </>

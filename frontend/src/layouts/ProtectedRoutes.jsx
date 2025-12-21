@@ -11,7 +11,7 @@ export default function ProtectedRoute() {
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
-      <div className="min-h-screen bg-amber-100 px-20 py-8">
+      <div className="px-20 py-8">
         <Outlet />
       </div>
     </div>
