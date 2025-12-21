@@ -14,6 +14,10 @@ module.exports = {
       },
       BrandId: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "Brands",
+          key: "id",
+        },
         onDelete: "CASCADE",
         onUpdate: "RESTRICT",
       },

@@ -52,6 +52,21 @@ function errorHandler(err, req, res, next) {
   } else if (err.message === "INSUFFICIENT_STOCK") {
     response.status_code = 409;
     response.message = "Some items in your order are out of stock";
+  } else if (err.message === "PRODUCT_ID_REQUIRED") {
+    response.status_code = 400;
+    response.message = "Product ID is required";
+  } else if (err.message === "INVALID_QUANTITY") {
+    response.status_code = 400;
+    response.message = "Quantity must be at least 1";
+  } else if (err.message === "PRODUCT_NOT_FOUND") {
+    response.status_code = 404;
+    response.message = "Product not found";
+  } else if (err.message === "CART_ITEM_NOT_FOUND") {
+    response.status_code = 404;
+    response.message = "Cart item not found";
+  } else if (err.message === "CART_NOT_FOUND") {
+    response.status_code = 404;
+    response.message = "Cart not found";
   } else if (err.message.startsWith("ORDER_ADDRESS_UPDATE:")) {
     response.status_code = 400;
     const orderStatus = err.message.split(": ")[1];
