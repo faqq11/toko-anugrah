@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import ProtectedRoute from "./layouts/ProtectedRoutes.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
+import AdminLayout from "./layouts/AdminLayout.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -15,6 +17,9 @@ createRoot(document.getElementById("root")).render(
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
+        </Route>
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

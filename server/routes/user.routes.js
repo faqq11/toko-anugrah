@@ -10,6 +10,7 @@ const router = express.Router();
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
 router.get("/", authentication, authorize, UserController.getAllUser);
+router.get("/me", authentication, UserController.getMe);
 router.get("/:id", authentication, UserController.getOneUser);
 router.put(
   "/:id",

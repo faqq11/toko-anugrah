@@ -11,3 +11,7 @@ Product Category: npx sequelize-cli model:generate --name ProductCategory --attr
 Order: npx sequelize-cli model:generate --name Order --attributes UserId:integer,total_amount:integer,status:string,shipping_address:string
 
 Order Item: npx sequelize-cli model:generate --name OrderItem --attributes OrderId:integer,ProductId:integer,quantity:integer,price:integer
+
+Cart: npx sequelize-cli model:generate --name Cart --attributes UserId:integer,total_amount:integer
+
+Cart Item: npx sequelize-cli model:generate --name CartItem --attributes CartId:integer,ProductId:integer,quantity:integer,price:integer

@@ -203,6 +203,21 @@ class UserController {
       next(err);
     }
   }
+
+  static async getMe(req, res, next) {
+    try {
+      const userData = req.userData;
+
+      res.status(200).json({
+        success: true,
+        status_code: 200,
+        message: "User data retrieved successfully",
+        data: userData,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = UserController;
