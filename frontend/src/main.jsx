@@ -8,6 +8,9 @@ import RegisterPage from "./pages/RegisterPage.jsx";
 import ProtectedRoute from "./layouts/ProtectedRoutes.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
+import CartPage from "./pages/CartPage.jsx";
+import ProductDetailPage from "./pages/ProductDetailPage.jsx";
+import UpdateCartItemPage from "./pages/UpdateCartItemPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -17,6 +20,9 @@ createRoot(document.getElementById("root")).render(
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
+          <Route path="/my-cart" element={<CartPage />} />
+          <Route path="/my-cart/:id/update" element={<UpdateCartItemPage />} />
         </Route>
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<AdminPage />} />

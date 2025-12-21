@@ -26,6 +26,13 @@ export default function NavBar() {
           </Link>
 
           <Link
+            to="/my-cart"
+            className="text-white text-sm font-medium hover:text-green-200 transition-colors"
+          >
+            My Cart
+          </Link>
+
+          <Link
             to="/profile"
             className="text-white text-sm font-medium hover:text-green-200 transition-colors"
           >
